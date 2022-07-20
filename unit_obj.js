@@ -288,15 +288,15 @@
     return steer;
   }
   
-  UnitObj.prototype.render = function() {
+  UnitObj.prototype.render = function(textWithViewPort) {
     // Draw a triangle rotated in the direction of velocity
     let theta = this.direction.heading() + radians(90);
     fill(127);
     stroke(200);
-    if(this.p1p2 == 2){
-      fill(color(225,228,153));
-    }else if(this.p1p2 ==3){
-      fill(color(153,115,228));
+    let colors = [color(154,206,167),color(58,126,76),'orange','yellow','green','blue','indigo','violet'];
+    if(this.p1p2 != 1){
+      let color_index = (this.p1p2-2)%colors.length;
+      fill(colors[color_index]); 
     }
       
     if(this.unitType == 1)
@@ -313,10 +313,13 @@
     pop();
 
     if(this.unitType!=1){
-      text(int(this.health), this.position.x+10, this.position.y-5);
-      text(int(this.life/100), this.position.x+10, this.position.y+7);
+      textWithViewPort.text(int(this.health), this.position.x+10, this.position.y-5);
+      textWithViewPort.text(int(this.life/100), this.position.x+10, this.position.y+7);
     }
-    text(this.info, this.position.x+25, this.position.y);
+    else{
+      textWithViewPort.text(this.p1p2, this.position.x+10, this.position.y);
+    }
+    textWithViewPort.text(this.info, this.position.x+25, this.position.y);
 
     //攻擊特效
     if(this.attack_VFX){

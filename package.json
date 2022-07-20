@@ -1,0 +1,8 @@
+{
+  "name": "vollocare.github.io",
+  "version": "1.0.0",
+  "main": "index.html",
+  "repository": "git@github.com:vollocare/vollocare.github.io.git",
+  "author": "louis <vollocare@gmail.com>",
+  "license": "MIT"
+}

@@ -1,8 +1,10 @@
 
-
-let gupUnitObj = null;
-let gupUnitObj_enemy = null;
-let gupUnitObj_enemy2 = null;
+let displayWidth = 1024;
+let displayHeight = 640;
+let viewX = 0;
+let viewY = 0;
+let gupUnitObj_size = 9;
+let gupUnitObjs = [];
 let control = 1;//1=我方 2=enemy 3=enemy2
 let flock = null;
 let obstacles = null; //障礙物
@@ -14,15 +16,29 @@ let patrol = null;//巡邏點
 let isPVP = false;
 let btn_is_PVP = null;
 let isPVP_time = 1200;
+let currCamera = null;
+let textWithViewPort = null;
+
+
 
 
 function setup() {
-  createCanvas(900, 550);
-  createP("Group Move.");
+  createCanvas(displayWidth, displayHeight,WEBGL);//WEBGL
+  currCamera = createCamera();
+  viewX = displayWidth/2;
+  viewY = displayHeight/2;
+  textWithViewPort = new TextWithViewPort(displayWidth,displayHeight);
+  textWithViewPort.setViewPort(viewX, viewY);
 
-  gupUnitObj = new GupUnitObj(50,height / 2,1);
-  gupUnitObj_enemy = new GupUnitObj(width - 150,height - 150,2);
-  gupUnitObj_enemy2 = new GupUnitObj(width/2,height - 150,3);
+  currCamera.setPosition(viewX, viewY, 554); 
+
+
+  createP("Group Move.");
+  for (let i = 0; i < gupUnitObj_size; i++) {
+    let w_length = (displayWidth/gupUnitObj_size)*i+20;
+    gupUnitObjTmp = new GupUnitObj(w_length,displayHeight-50,i+1);
+    gupUnitObjs.push(gupUnitObjTmp);
+  }
 
   flock = new Flock();
   patrol = new Patrol();
@@ -37,9 +53,11 @@ function setup() {
   obstacles.addObstacle(100,300,55);
   obstacles.addObstacle(600,300,100);
   obstacles.addObstacle(700,200,70);
+  obstacles.addObstacle(550,480,65);
+  obstacles.addObstacle(250,450,85);
+  obstacles.addObstacle(850,400,85);
 
-
-  btn_change_control = createButton('控制_我方');
+  btn_change_control = createButton('控制_P1');
   btn_change_control.position(20, 20);
   btn_change_control.mousePressed(change_control);
 
@@ -54,60 +72,85 @@ function setup() {
   patrol.addpoint(50,50,350);
   patrol.addpoint(width - 50,50,400);
   patrol.addpoint(width - 50,height-50,350);
-  patrol.addpoint(50,height-50,400);
+  patrol.addpoint(50,height-50,300);
+  patrol.addpoint(width/2,height-50,300);
+  patrol.addpoint(width/2,50,400);
 
-  patrol.addGupUnitObj(gupUnitObj_enemy,0,50,150);
-  patrol.addGupUnitObj(gupUnitObj,2,width-50, 150);
-  patrol.addGupUnitObj(gupUnitObj_enemy2,3,width-50, 150);
+  for (let i = 0; i < gupUnitObj_size; i++) {
+    let w_length = displayWidth/gupUnitObj_size+20;
+    patrol.addGupUnitObj(gupUnitObjs[i],i%patrol.patrol_points.length,w_length,displayHeight-50); 
+  }
 
 }
 
 function draw() {
   
   _lastTime =  Date.now()-lastTime;
-  if(_lastTime >= 41 && gupUnitObj!=null) {
+  if(_lastTime >= 41 && gupUnitObjs.length > 0) {
+    if (keyIsPressed === true) {
+        let migration_length = 10;
+        if(keyCode==87) viewY-=migration_length;
+        if(keyCode==83) viewY+=migration_length;
+        if(keyCode==65) viewX-=migration_length;
+        if(keyCode==68) viewX+=migration_length;
+        
+      currCamera.setPosition(viewX, viewY, 554); 
+      textWithViewPort.setViewPort(viewX, viewY);
+    } 
+
+
+    
+    textWithViewPort.clear();
     background(51);
-    let g0_enemy = gupUnitObj_enemy.unitObjs.concat(gupUnitObj_enemy2.unitObjs);
-    let g1_enemy = gupUnitObj_enemy2.unitObjs.concat(gupUnitObj.unitObjs);
-    let g2_enemy = gupUnitObj.unitObjs.concat(gupUnitObj_enemy.unitObjs);
 
-    flock.run(gupUnitObj.Leader , gupUnitObj.unitObjs , obstacles.obstacles,g0_enemy);
-    flock.run(gupUnitObj_enemy.Leader , gupUnitObj_enemy.unitObjs , obstacles.obstacles,g1_enemy);
-    flock.run(gupUnitObj_enemy2.Leader , gupUnitObj_enemy2.unitObjs , obstacles.obstacles,g2_enemy);
+    for (let i = 0; i < gupUnitObj_size; i++) {
+      let g_enemy = [];
+      for (let j = 0; j < gupUnitObj_size; j++) {
+        if(i!=j){
+          g_enemy = g_enemy.concat(gupUnitObjs[j].unitObjs);
+        }
+          
+      }
 
-   
-    gupUnitObj.update(g0_enemy);
-    gupUnitObj_enemy.update(g1_enemy);
-    gupUnitObj_enemy2.update(g2_enemy);
+      flock.run(gupUnitObjs[i].Leader , gupUnitObjs[i].unitObjs , obstacles.obstacles,g_enemy);
+     
+        
+      gupUnitObjs[i].update(g_enemy);
+    }
 
     obstacles.render();
 
-    gupUnitObj.render();
-    gupUnitObj_enemy.render();
-    gupUnitObj_enemy2.render();
+    for (let i = 0; i < gupUnitObj_size; i++) {
+      gupUnitObjs[i].render(textWithViewPort);
+    }
 
 
     patrol.run();
     patrol.draw();
     
-    text('我 '+gupUnitObj.unitObjs.length, width/2-75, 20);
-    text('敵1 '+gupUnitObj_enemy.unitObjs.length, width/2-25, 20);
-    text('敵2 '+gupUnitObj_enemy2.unitObjs.length, width/2+25, 20);
+    textWithViewPort.fill(color(249,249,246));
+    for (let i = 0; i < gupUnitObj_size; i++) {
+      let xPos = viewX-displayWidth/2+100+i*50;
+
+      textWithViewPort.text('P'+(i+1)+'_'+ gupUnitObjs[i].unitObjs.length, xPos, (viewY-displayHeight/2)+20);
+    }
+
+    
+
 
     if(isPVP){
       isPVP_time--;
-      text('PT '+isPVP_time, width/2+85, 20);
+      textWithViewPort.text('PT '+isPVP_time, width/2+85, 50);
       if(isPVP_time<=0){
         isPVP_time = 1200;
-        gupUnitObj.setDestination(gupUnitObj_enemy.Leader.position);
-        gupUnitObj_enemy.setDestination(gupUnitObj.Leader.position);
-        gupUnitObj_enemy2.setDestination(gupUnitObj.Leader.position);
- 
+        for (let i = 1; i < gupUnitObj_size; i++) {
+          gupUnitObjs[i].setDestination(gupUnitObjs[0].Leader.position);  
+        }
       }
 
     }
     
-    
+    textWithViewPort.render();
 
     lastTime = Date.now();
 
@@ -126,15 +169,10 @@ function mousePressed() {
     ismousePressed  = false;
     return;
   }
- 
-  if(control == 1)
-    gupUnitObj.setDestination(createVector(mouseX, mouseY));
-  else if(control == 2) {
-    gupUnitObj_enemy.setDestination(createVector(mouseX, mouseY));
-  }else{  
-    gupUnitObj_enemy2.setDestination(createVector(mouseX, mouseY));
-  }
+  let newmouseX = mouseX - (displayWidth/2-viewX);
+  let newmouseY = mouseY - (displayHeight/2-viewY);
 
+  gupUnitObjs[control-1].setDestination(createVector(newmouseX, newmouseY));
  
 }
 
@@ -144,13 +182,7 @@ function new_unit()
 
   if((Date.now()-mouselastTime) >= 200){
     for (var j = 0; j < 20; j++) {
-      if(control == 1)
-        gupUnitObj.add(50, 150);
-      else if(control == 2) {
-        gupUnitObj_enemy.add(width-50, 150);
-      } else{ 
-        gupUnitObj_enemy2.add(width/2, 150);
-      }
+      gupUnitObjs[control-1].add(displayWidth/2,displayHeight-50);
     }
 
     mouselastTime = Date.now();
@@ -159,18 +191,10 @@ function new_unit()
 
 function change_control(){
   ismousePressed = true;
-
-  if(control == 1){
-    btn_change_control.html('控制_敵1');
-    control = 2;
-  }else if(control == 2){ 
-    btn_change_control.html('控制_敵2');
-    control = 3;
-  }else{  
-    btn_change_control.html('控制_我方');
+  control+=1;
+  if(control>gupUnitObj_size) 
     control = 1;
-  }
-
+  btn_change_control.html('控制_P'+control);
 }
 
 function sw_pvp(){
@@ -196,6 +220,37 @@ function Patrol_gupUnitObj(gupUnitObj,index,create_x,create_y) {
   this.create_x = create_x;
   this.create_y = create_y;
 }
+
+function TextWithViewPort(displayWidth,displayHeight) {
+  this.displayWidth = displayWidth;
+  this.displayHeight = displayHeight;
+  this.viewX = 0;
+  this.viewY = 0;
+  this.textScreen = createGraphics(displayWidth,displayHeight);
+  //this.textScreen.background(51);
+}
+TextWithViewPort.prototype.setViewPort = function(viewX,viewY) {
+  this.viewX = viewX;
+  this.viewY = viewY;
+}
+  
+TextWithViewPort.prototype.clear = function() {
+  this.textScreen.clear();
+}
+
+TextWithViewPort.prototype.fill = function(color) {
+  this.textScreen.fill(color);
+}
+TextWithViewPort.prototype.text = function(text,x,y) {
+  let newX = x+this.displayWidth/2-this.viewX;
+  let newY = y+this.displayHeight/2-this.viewY;
+  this.textScreen.text(text,newX,newY);
+}
+TextWithViewPort.prototype.render = function() {
+  image(this.textScreen,this.viewX-this.displayWidth/2,this.viewY-this.displayHeight/2);
+}
+
+
 
 function Patrol() {
   this.patrol_points = [];

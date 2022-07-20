@@ -6,6 +6,7 @@ function GupUnitObj(x,y,p1p2) {
   this.unitObjs = [];
   this.Leader = new UnitObj(x,y);
   this.Leader.unitType = 1;
+  this.Leader.p1p2 = p1p2;
   this.p1p2 = p1p2;
 }
 
@@ -57,11 +58,11 @@ GupUnitObj.prototype.update = function(enemyunits) {
   }
 }
 
-GupUnitObj.prototype.render = function() {
-  this.Leader.render();
+GupUnitObj.prototype.render = function(textScreen) {
+  this.Leader.render(textScreen);
 
   for (let i = 0; i < this.unitObjs.length; i++) {
-      this.unitObjs[i].render();  
+      this.unitObjs[i].render(textScreen);  
     }
 
 }
