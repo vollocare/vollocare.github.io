@@ -30,7 +30,12 @@ GupUnitObj.prototype.update = function(enemyunits) {
       if(dist > this.unitObjs[i].attack_visible_distance/2)
         this.unitObjs[i].attack_unit = null;
     }
-    if(this.unitObjs[i].attack_unit == null){
+    // PVP F 狀態下清除攻擊目標
+    if(!isPVP && this.unitObjs[i].attack_unit){
+      this.unitObjs[i].attack_unit = null;
+      this.unitObjs[i].setFollow();
+    }
+    if(this.unitObjs[i].attack_unit == null && isPVP){
       let min_dist = 999999;
       let min_enemyunit = null;
       for (let j = 0; j < enemyunits.length; j++) {
