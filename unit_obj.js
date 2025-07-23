@@ -317,14 +317,17 @@
     endShape(CLOSE);
     pop();
 
-    if(this.unitType!=1){
-      textWithViewPort.text(int(this.health), this.position.x+10, this.position.y-5);
-      textWithViewPort.text(int(this.life/100), this.position.x+10, this.position.y+7);
-    }
-    else{
+    if(this.unitType==1){
       textWithViewPort.text(this.p1p2, this.position.x+10, this.position.y);
     }
-    textWithViewPort.text(this.info, this.position.x+25, this.position.y);
+    
+    if(showUnitStats){
+      if(this.unitType!=1){
+        textWithViewPort.text(int(this.health), this.position.x+10, this.position.y-5);
+        textWithViewPort.text(int(this.life/100), this.position.x+10, this.position.y+7);
+      }
+      textWithViewPort.text(this.info, this.position.x+25, this.position.y);
+    }
 
     //攻擊特效
     if(this.attack_VFX){

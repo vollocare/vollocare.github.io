@@ -22,6 +22,8 @@ let showArrows = true;
 let btn_show_arrows = null;
 let showTargetLines = true;
 let btn_show_target_lines = null;
+let showUnitStats = true;
+let btn_show_unit_stats = null;
 
 
 
@@ -80,6 +82,10 @@ function setup() {
   btn_show_target_lines = createButton('Target ON');
   btn_show_target_lines.position(displayWidth - 120, 50);
   btn_show_target_lines.mousePressed(toggle_target_lines);
+
+  btn_show_unit_stats = createButton('Stats ON');
+  btn_show_unit_stats.position(displayWidth - 120, 80);
+  btn_show_unit_stats.mousePressed(toggle_unit_stats);
 
   patrol.addpoint(50,50,350);
   patrol.addpoint(width - 50,50,400);
@@ -236,6 +242,15 @@ function toggle_target_lines(){
     btn_show_target_lines.html('Target ON');
   else
     btn_show_target_lines.html('Target OFF');
+}
+
+function toggle_unit_stats(){
+  showUnitStats = !showUnitStats;
+  
+  if(showUnitStats)
+    btn_show_unit_stats.html('Stats ON');
+  else
+    btn_show_unit_stats.html('Stats OFF');
 }
 
 function Patrol_point(x,y,_time) {
