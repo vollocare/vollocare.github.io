@@ -200,7 +200,12 @@
        this.attack_VFX = null;
 
     if(this.move_state == 'attack'){
-      
+      // PVP F 狀態下停止攻擊並回到跟隨狀態
+      if(!isPVP){
+        this.attack_unit = null;
+        this.move_state = 'follow';
+        return;
+      }
 
       if(this.attack_unit == null){
         this.move_state = 'follow';
@@ -218,7 +223,7 @@
       }
       else{
         let dist = p5.Vector.dist(this.attack_unit.position,this.position)
-        if(dist <= this.attack_range && this.now_attack_cooldown >= 0){
+        if(dist <= this.attack_range && this.now_attack_cooldown >= 0 && isPVP){
           this.now_attack_cooldown =  this.def_attack_cooldown;
           let v = p5.Vector.sub(this.attack_unit.position,this.position);
           this.attack_VFX = new Attack_VFX(this.position,v,'red');
