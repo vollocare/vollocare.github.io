@@ -23,13 +23,13 @@ Flock.prototype.run = function(Leader,unitObjs,obstacles,enemy_unitObjs) {
             unitObjs[i].applyForce(ali);
             unitObjs[i].applyForce(coh);
             if(avo.mag()>0){
-                this.drawArrow(unitObjs[i].position, p5.Vector.mult(avo,1000), 'while');
+                if(showArrows) this.drawArrow(unitObjs[i].position, p5.Vector.mult(avo,1000), 'while');
                 avo.mult(2.0);
                 unitObjs[i].applyForce(avo);
             }
 
             if(avo_enemy.mag()>0){
-                this.drawArrow(unitObjs[i].position, p5.Vector.mult(avo_enemy,1000), 'purple');
+                if(showArrows) this.drawArrow(unitObjs[i].position, p5.Vector.mult(avo_enemy,1000), 'purple');
                 avo_enemy.mult(2.0);
                 unitObjs[i].applyForce(avo_enemy);
             }
@@ -45,13 +45,13 @@ Flock.prototype.run = function(Leader,unitObjs,obstacles,enemy_unitObjs) {
             unitObjs[i].applyForce(coh);
             
             if(avo.mag()>0){
-                this.drawArrow(unitObjs[i].position, p5.Vector.mult(avo,1000), 'while');
+                if(showArrows) this.drawArrow(unitObjs[i].position, p5.Vector.mult(avo,1000), 'while');
                 avo.mult(2.0);
                 unitObjs[i].applyForce(avo);
             }
 
             if(avo_enemy.mag()>0){
-                this.drawArrow(unitObjs[i].position, p5.Vector.mult(avo_enemy,1000), 'purple');
+                if(showArrows) this.drawArrow(unitObjs[i].position, p5.Vector.mult(avo_enemy,1000), 'purple');
                 avo_enemy.mult(2.0);
                 unitObjs[i].applyForce(avo_enemy);
             }
@@ -63,7 +63,7 @@ Flock.prototype.run = function(Leader,unitObjs,obstacles,enemy_unitObjs) {
 
         if(avo.mag()>0){
             
-            this.drawArrow(Leader.position, p5.Vector.mult(avo,1000), 'while');
+            if(showArrows) this.drawArrow(Leader.position, p5.Vector.mult(avo,1000), 'while');
             Leader.applyForce(avo);
         }
     }

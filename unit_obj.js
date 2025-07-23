@@ -145,17 +145,17 @@
     if(this.move_state == 'move'){
 
       if(p5.Vector.mult(this.acceleration,1000).mag() > 0.5)
-        this.drawArrow(this.position,p5.Vector.mult(this.acceleration,1000),color(243,201,159));
+        if(showArrows) this.drawArrow(this.position,p5.Vector.mult(this.acceleration,1000),color(243,201,159));
         
       if(this.acceleration.mag() == 0){
         this.applyForce(this.seek(this.destination))
         
         if(p5.Vector.mult(this.acceleration,1000).mag() > 0.5)
-          this.drawArrow(this.position,p5.Vector.mult(this.acceleration,1000),'yellow');
+          if(showArrows) this.drawArrow(this.position,p5.Vector.mult(this.acceleration,1000),'yellow');
         
       }
       
-      this.drawArrow(this.position,p5.Vector.mult(this.velocity,100),'green');
+      if(showArrows) this.drawArrow(this.position,p5.Vector.mult(this.velocity,100),'green');
       
 
       // Update velocity
@@ -247,7 +247,7 @@
         distancePos = p5.Vector.add(this.position,rv150); 
 
 
-        this.drawArrow(this.position,rv150,'orange');
+        if(showArrows) this.drawArrow(this.position,rv150,'orange');
       }
       else if(this.now_attack_cooldown > 0 && dist < this.attack_range*1.5){
         

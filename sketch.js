@@ -18,6 +18,8 @@ let btn_is_PVP = null;
 let isPVP_time = 1200;
 let currCamera = null;
 let textWithViewPort = null;
+let showArrows = true;
+let btn_show_arrows = null;
 
 
 
@@ -68,6 +70,10 @@ function setup() {
   btn_is_PVP = createButton('PVP F');
   btn_is_PVP.position(20, 80);
   btn_is_PVP.mousePressed(sw_pvp);
+
+  btn_show_arrows = createButton('Arrow ON');
+  btn_show_arrows.position(displayWidth - 120, 20);
+  btn_show_arrows.mousePressed(toggle_arrows);
 
   patrol.addpoint(50,50,350);
   patrol.addpoint(width - 50,50,400);
@@ -206,6 +212,15 @@ function sw_pvp(){
     btn_is_PVP.html('PVP T');
   else
     btn_is_PVP.html('PVP F');
+}
+
+function toggle_arrows(){
+  showArrows = !showArrows;
+  
+  if(showArrows)
+    btn_show_arrows.html('Arrow ON');
+  else
+    btn_show_arrows.html('Arrow OFF');
 }
 
 function Patrol_point(x,y,_time) {

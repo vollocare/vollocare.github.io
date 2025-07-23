@@ -4,5 +4,11 @@
   "main": "index.html",
   "repository": "git@github.com:vollocare/vollocare.github.io.git",
   "author": "louis <vollocare@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "ts-loader": "^9.4.4"
+  },
+  "dependencies": {
+    "@types/p5": "^1.6.2"
+  }
 }
