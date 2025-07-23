@@ -209,7 +209,7 @@
       
 
       let v1 = p5.Vector.sub(this.attack_unit.position,this.position);
-      this.drawAttArrow(this.position,v1,color(223, 165, 165));
+      if(showTargetLines) this.drawAttArrow(this.position,v1,color(223, 165, 165));
       
 
       if(this.now_attack_cooldown > 0)

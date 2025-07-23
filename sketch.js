@@ -20,6 +20,8 @@ let currCamera = null;
 let textWithViewPort = null;
 let showArrows = true;
 let btn_show_arrows = null;
+let showTargetLines = true;
+let btn_show_target_lines = null;
 
 
 
@@ -74,6 +76,10 @@ function setup() {
   btn_show_arrows = createButton('Arrow ON');
   btn_show_arrows.position(displayWidth - 120, 20);
   btn_show_arrows.mousePressed(toggle_arrows);
+
+  btn_show_target_lines = createButton('Target ON');
+  btn_show_target_lines.position(displayWidth - 120, 50);
+  btn_show_target_lines.mousePressed(toggle_target_lines);
 
   patrol.addpoint(50,50,350);
   patrol.addpoint(width - 50,50,400);
@@ -221,6 +227,15 @@ function toggle_arrows(){
     btn_show_arrows.html('Arrow ON');
   else
     btn_show_arrows.html('Arrow OFF');
+}
+
+function toggle_target_lines(){
+  showTargetLines = !showTargetLines;
+  
+  if(showTargetLines)
+    btn_show_target_lines.html('Target ON');
+  else
+    btn_show_target_lines.html('Target OFF');
 }
 
 function Patrol_point(x,y,_time) {
