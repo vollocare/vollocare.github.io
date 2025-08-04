@@ -1,6 +1,6 @@
 
-let displayWidth = 1024;
-let displayHeight = 640;
+let displayWidth = windowWidth;
+let displayHeight = windowHeight;
 let viewX = 0;
 let viewY = 0;
 let gupUnitObj_size = 9;
@@ -29,6 +29,8 @@ let btn_show_unit_stats = null;
 
 
 function setup() {
+  displayWidth = windowWidth;
+  displayHeight = windowHeight;
   createCanvas(displayWidth, displayHeight,WEBGL);//WEBGL
   currCamera = createCamera();
   viewX = displayWidth/2;
@@ -296,6 +298,24 @@ TextWithViewPort.prototype.render = function() {
 }
 
 
+
+function windowResized() {
+  displayWidth = windowWidth;
+  displayHeight = windowHeight;
+  resizeCanvas(displayWidth, displayHeight);
+  
+  viewX = displayWidth/2;
+  viewY = displayHeight/2;
+  
+  textWithViewPort = new TextWithViewPort(displayWidth, displayHeight);
+  textWithViewPort.setViewPort(viewX, viewY);
+  
+  currCamera.setPosition(viewX, viewY, 554);
+  
+  btn_show_arrows.position(displayWidth - 120, 20);
+  btn_show_target_lines.position(displayWidth - 120, 50);
+  btn_show_unit_stats.position(displayWidth - 120, 80);
+}
 
 function Patrol() {
   this.patrol_points = [];
