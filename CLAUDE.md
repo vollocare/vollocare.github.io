@@ -28,7 +28,7 @@ The project follows a hybrid architecture with both TypeScript source files and 
 
 ### Development Setup
 ```bash
-npm install --save-dev ts-loader
+npm install
 ```
 
 ### Build Project
@@ -38,7 +38,16 @@ webpack
 Output will be generated to `./dist/app.js`
 
 ### TypeScript Compilation
+```bash
+npx tsc
+```
 The TypeScript compiler outputs to `./dist/` directory as configured in `tsconfig.json`.
+
+### Full Build Process
+For complete deployment build:
+```bash
+npm install && npx tsc && webpack
+```
 
 ### GitHub Operations
 Use GitHub CLI (`gh`) for all GitHub-related operations:
@@ -49,6 +58,41 @@ gh pr view
 gh issue create
 gh repo view
 ```
+
+## GitHub Actions Integration
+
+This project has Claude Code GitHub Actions integration configured:
+
+### Existing GitHub Actions
+The repository includes two GitHub Actions workflows:
+
+1. **Claude Code Interactive** (`.github/workflows/claude.yml`)
+   - Triggers when `@claude` is mentioned in issues, PRs, or comments
+   - Provides AI-powered assistance for development tasks
+   - Requires `CLAUDE_CODE_OAUTH_TOKEN` secret
+
+2. **Claude Code Review** (`.github/workflows/claude-code-review.yml`)
+   - Automatic code review on pull requests
+   - Provides feedback on code quality, security, and best practices
+   - Runs on PR opened/synchronized events
+
+### GitHub Pages Deployment
+This project is configured for GitHub Pages deployment:
+
+#### Manual Deployment
+1. Build the project: `npm install && npx tsc && webpack`
+2. Commit all changes including `dist/` directory
+3. Push to main branch - GitHub Pages will serve from root directory
+
+#### Repository Settings
+- Enable GitHub Pages in repository settings
+- Set source to "Deploy from a branch" 
+- Select "main" branch and "/ (root)" folder
+
+### Claude Code Usage
+- Mention `@claude` in issues or PR comments to get AI assistance
+- Claude can help with debugging, code review, and development tasks
+- Automatic code review runs on all pull requests
 
 ## Key Systems
 
