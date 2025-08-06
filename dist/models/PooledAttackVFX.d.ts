@@ -1,5 +1,6 @@
 import { IPoolable } from '../interfaces/IObjectPool';
 import { IVector } from '../types/vector';
+import { ObjectPool } from '../utils/ObjectPool';
 import { Color } from '../types/common';
 export interface IAttackVFX extends IPoolable {
     id: string;
@@ -47,5 +48,5 @@ export declare enum AttackVFXType {
     PULSE = "pulse",// 脈衝
     EXPLOSION = "explosion"
 }
-export declare function createAttackVFXPool(p: p5Instance, initialSize?: number, maxSize?: number): any;
+export declare function createAttackVFXPool(p: p5Instance, initialSize?: number, maxSize?: number): ObjectPool<PooledAttackVFX>;
 //# sourceMappingURL=PooledAttackVFX.d.ts.map

@@ -1,5 +1,6 @@
 // PooledAttackVFX - 可池化的攻擊視覺特效，提升大量特效的效能
 /// <reference path="../types/p5.d.ts" />
+import { ObjectPool } from '../utils/ObjectPool';
 import { Vector } from '../utils/Vector';
 export class PooledAttackVFX {
     constructor(_p) {
@@ -162,7 +163,6 @@ export var AttackVFXType;
 })(AttackVFXType || (AttackVFXType = {}));
 // 工廠函數用於創建物件池
 export function createAttackVFXPool(p, initialSize = 20, maxSize = 100) {
-    const ObjectPool = require('../utils/ObjectPool').ObjectPool;
     return new ObjectPool(() => new PooledAttackVFX(p), initialSize, maxSize);
 }
 //# sourceMappingURL=PooledAttackVFX.js.map

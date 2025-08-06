@@ -1,5 +1,6 @@
 // OptimizedRenderSystem - 優化渲染系統，包含視錐剔除、LOD、批次渲染等優化技術
 /// <reference path="../types/p5.d.ts" />
+import { Vector } from '../utils/Vector';
 export var LODLevel;
 (function (LODLevel) {
     LODLevel[LODLevel["HIGH"] = 0] = "HIGH";
@@ -42,8 +43,8 @@ export class OptimizedRenderSystem {
             ...config
         };
         // 初始化向量
-        this.cameraPosition = this.p.createVector(0, 0);
-        this.lastCameraPosition = this.p.createVector(0, 0);
+        this.cameraPosition = new Vector(this.p, 0, 0);
+        this.lastCameraPosition = new Vector(this.p, 0, 0);
         // 初始化渲染批次
         for (const level of Object.values(LODLevel)) {
             if (typeof level === 'number') {
@@ -79,7 +80,7 @@ export class OptimizedRenderSystem {
     }
     // 視窗控制
     setViewPort(viewX, viewY) {
-        this.cameraPosition = { x: viewX, y: viewY };
+        this.cameraPosition = new Vector(this.p, viewX, viewY);
         // 更新視錐邊界
         const margin = this.config.frustumMargin;
         this.viewBounds = {
@@ -146,7 +147,7 @@ export class OptimizedRenderSystem {
         }
     }
     // 除錯渲染
-    renderDebugInfo(info) {
+    renderDebugInfo(_info) {
         const debugText = [
             `Render Stats:`,
             `Objects: ${this.stats.renderedObjects}/${this.stats.totalObjects}`,
@@ -169,13 +170,13 @@ export class OptimizedRenderSystem {
             this.renderCullingBounds();
         }
     }
-    renderArrows(enabled) {
+    renderArrows(_enabled) {
         // 實作箭頭渲染
     }
-    renderTargetLines(enabled) {
+    renderTargetLines(_enabled) {
         // 實作目標線渲染
     }
-    renderUnitStats(enabled) {
+    renderUnitStats(_enabled) {
         // 實作單位統計渲染
     }
     renderAttackEffects(effects) {
@@ -193,10 +194,10 @@ export class OptimizedRenderSystem {
             }
         }
     }
-    renderHealthBars(units) {
+    renderHealthBars(_units) {
         // 在 renderUnits 中處理
     }
-    setBackgroundColor(color) {
+    setBackgroundColor(_color) {
         // 設定背景色
     }
     resize(width, height) {
@@ -308,7 +309,7 @@ export class OptimizedRenderSystem {
                 // 簡化渲染
                 this.p.fill(100);
                 this.p.noStroke();
-                this.p.circle(obstacle.position.x, obstacle.position.y, obstacle.r * 1.5);
+                this.p.circle(obstacle.position.x, obstacle.position.y, obstacle.radius * 1.5);
                 break;
         }
     }
@@ -328,7 +329,7 @@ export class OptimizedRenderSystem {
             [255, 0, 0], // 群組 2 - 紅色  
             [0, 0, 255], // 群組 3 - 藍色
         ];
-        const colorIndex = Math.min(unit.groupId - 1, colors.length - 1);
+        const colorIndex = Math.min((unit.groupId || 1) - 1, colors.length - 1);
         const color = colors[colorIndex];
         this.p.fill(color[0], color[1], color[2]);
         this.p.noStroke();

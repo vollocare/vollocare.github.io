@@ -203,7 +203,6 @@ export class CollisionSystem {
             this.obstacleQuadTree.resetStats();
     }
     updateFrameStats() {
-        const now = Date.now();
         // 更新每幀統計
         this.frameHistory.push(this.frameChecks);
         if (this.frameHistory.length > 60) { // 保持 60 幀的歷史
