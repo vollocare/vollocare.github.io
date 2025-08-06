@@ -45,7 +45,7 @@ export interface CollisionStats {
 }
 
 export class CollisionSystem implements ICollisionSystem {
-  private p: p5Instance;
+  // private p: p5Instance;
   
   // 空間分割結構
   private unitQuadTree?: QuadTree<IUnit>;
@@ -67,14 +67,14 @@ export class CollisionSystem implements ICollisionSystem {
   // 效能追蹤
   private frameChecks: number = 0;
   private frameHistory: number[] = [];
-  private lastFrameTime: number = Date.now();
+  // private lastFrameTime: number = Date.now();
   
   // 快取
   private nearbyUnitsCache: Map<string, { units: IUnit[]; timestamp: number }> = new Map();
   private cacheExpireTime: number = 100; // 100ms
   
-  constructor(p: p5Instance, worldBounds: BoundingBox) {
-    this.p = p;
+  constructor(_p: p5Instance, worldBounds: BoundingBox) {
+    // this.p = p;
     
     // 初始化空間分割結構
     this.unitQuadTree = new QuadTree<IUnit>(worldBounds, 8, 6);
@@ -308,7 +308,7 @@ export class CollisionSystem implements ICollisionSystem {
     }
     
     this.frameChecks = 0;
-    this.lastFrameTime = now;
+    // this.lastFrameTime = now;
   }
   
   private cleanCache(): void {
@@ -321,8 +321,8 @@ export class CollisionSystem implements ICollisionSystem {
   }
   
   // 進階碰撞檢測方法
-  public checkRaycast(start: IVector, end: IVector, obstacles: IObstacle[]): { hit: boolean; obstacle?: IObstacle; point?: IVector } {
-    const result = { hit: false, obstacle: undefined as IObstacle | undefined, point: undefined as IVector | undefined };
+  public checkRaycast(start: IVector, end: IVector): { hit: boolean; obstacle?: IObstacle; point?: IVector } {
+    const result: { hit: boolean; obstacle?: IObstacle; point?: IVector } = { hit: false };
     
     // 使用空間分割查詢射線路徑上的障礙物
     if (this.spatialPartitioningEnabled && this.obstacleQuadTree) {
@@ -336,7 +336,7 @@ export class CollisionSystem implements ICollisionSystem {
       const candidates = this.obstacleQuadTree.queryRange(bounds);
       
       for (const obstacle of candidates) {
-        if (this.lineCircleIntersection(start, end, obstacle.position, obstacle.r)) {
+        if (this.lineCircleIntersection(start, end, obstacle.position, obstacle.radius)) {
           result.hit = true;
           result.obstacle = obstacle;
           result.point = obstacle.position; // 簡化實作

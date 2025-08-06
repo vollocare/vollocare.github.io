@@ -60,7 +60,7 @@ export class OptimizedRenderSystem implements IRenderSystem {
   
   // 視錐和相機
   private viewBounds: BoundingBox = { left: 0, right: 0, top: 0, bottom: 0 };
-  private cameraPosition: IVector = { x: 0, y: 0 };
+  private cameraPosition: IVector;
   
   // 渲染批次
   private renderBatches: Map<LODLevel, RenderBatch> = new Map();
@@ -76,7 +76,7 @@ export class OptimizedRenderSystem implements IRenderSystem {
   };
   
   // 快取和優化
-  private lastCameraPosition: IVector = { x: 0, y: 0 };
+  private lastCameraPosition: IVector;
   private visibilityCache: Map<string, { visible: boolean; lodLevel: LODLevel; timestamp: number }> = new Map();
   private cacheExpireTime: number = 100; // 100ms
   
@@ -105,6 +105,10 @@ export class OptimizedRenderSystem implements IRenderSystem {
       ...config
     };
     
+    // 初始化向量
+    this.cameraPosition = this.p.createVector(0, 0);
+    this.lastCameraPosition = this.p.createVector(0, 0);
+    
     // 初始化渲染批次
     for (const level of Object.values(LODLevel)) {
       if (typeof level === 'number') {
@@ -126,7 +130,7 @@ export class OptimizedRenderSystem implements IRenderSystem {
     this.resetStats();
     
     // 渲染各個批次
-    for (const [lodLevel, batch] of this.renderBatches) {
+    for (const [, batch] of this.renderBatches) {
       if (batch.units.length === 0 && batch.obstacles.length === 0 && batch.effects.length === 0) continue;
       
       this.p.push();

@@ -33,7 +33,7 @@ export class PooledAttackVFX implements IAttackVFX {
   public duration: number = 0;
   public remainingTime: number = 0;
   
-  private p: p5Instance;
+  // private p: p5Instance;
   private active: boolean = false;
   private vfxType: AttackVFXType = AttackVFXType.LINE;
   private intensity: number = 1.0;
@@ -42,10 +42,10 @@ export class PooledAttackVFX implements IAttackVFX {
   private animationProgress: number = 0;
   private pulseOffset: number = 0;
   
-  constructor(p: p5Instance) {
-    this.p = p;
-    this.position = new Vector(p, 0, 0);
-    this.targetPosition = new Vector(p, 0, 0);
+  constructor(_p: p5Instance) {
+    // this.p = _p;
+    this.position = new Vector(_p, 0, 0);
+    this.targetPosition = new Vector(_p, 0, 0);
     this.color = { r: 255, g: 255, b: 255, a: 255 };
     
     // 生成隨機脈衝偏移以避免所有特效同步
@@ -235,7 +235,8 @@ export enum AttackVFXType {
 
 // 工廠函數用於創建物件池
 export function createAttackVFXPool(p: p5Instance, initialSize: number = 20, maxSize: number = 100) {
-  return new (require('../utils/ObjectPool').ObjectPool)<PooledAttackVFX>(
+  const ObjectPool = require('../utils/ObjectPool').ObjectPool;
+  return new ObjectPool<PooledAttackVFX>(
     () => new PooledAttackVFX(p),
     initialSize,
     maxSize
