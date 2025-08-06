@@ -1,0 +1,68 @@
+import { IGameManager } from '../interfaces/IGameManager';
+import { IGroupUnit } from '../interfaces/IGroupUnit';
+import { IObstacle } from '../interfaces/IObstacle';
+import { IPatrol } from '../interfaces/IPatrol';
+import { ControlMode } from '../types/common';
+export declare class GameManager implements IGameManager {
+    private p;
+    private displayWidth;
+    private displayHeight;
+    private renderSystem;
+    private inputSystem;
+    private uiSystem;
+    private cameraSystem;
+    private flock;
+    private groupUnits;
+    private obstacles;
+    private patrol;
+    private paused;
+    private currentControl;
+    private isPVP;
+    private pvpTimer;
+    private lastFrameTime;
+    private readonly groupUnitCount;
+    constructor(p: p5Instance, displayWidth: number, displayHeight: number);
+    initialize(): void;
+    private initializeGroupUnits;
+    private initializeObstacles;
+    private initializePatrol;
+    private setupEventListeners;
+    private handleMouseClick;
+    private addUnitsToCurrentGroup;
+    update(deltaTime: number): void;
+    private updateGroupBehaviors;
+    private updatePVPMode;
+    render(): void;
+    private renderGameUI;
+    destroy(): void;
+    isPaused(): boolean;
+    setPaused(paused: boolean): void;
+    getGroupUnits(): IGroupUnit[];
+    getGroupUnit(index: number): IGroupUnit | undefined;
+    addGroupUnit(groupUnit: IGroupUnit): void;
+    removeGroupUnit(index: number): void;
+    getObstacles(): IObstacle[];
+    addObstacle(obstacle: IObstacle): void;
+    removeObstacle(obstacle: IObstacle): void;
+    getPatrol(): IPatrol;
+    getCurrentControl(): ControlMode;
+    setCurrentControl(control: ControlMode): void;
+    isPVPMode(): boolean;
+    setPVPMode(enabled: boolean): void;
+    getDisplaySize(): {
+        width: number;
+        height: number;
+    };
+    getGameStats(): {
+        frameRate: number;
+        totalUnits: number;
+        totalObstacles: number;
+        currentControl: ControlMode;
+        isPVP: boolean;
+        isActive: boolean;
+    };
+    onMousePressed(mouseX: number, mouseY: number): void;
+    onKeyPressed(keyCode: number): void;
+    onKeyReleased(keyCode: number): void;
+}
+//# sourceMappingURL=GameManager.d.ts.map

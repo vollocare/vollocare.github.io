@@ -1,0 +1,40 @@
+import { GameConfig, ControlMode } from '../types/common';
+import { IVector } from '../types/vector';
+import { GameManager } from '../core/GameManager';
+export declare class GameSketch {
+    readonly p: p5Instance;
+    config: GameConfig;
+    private gameManager;
+    viewX: number;
+    viewY: number;
+    currentControl: ControlMode;
+    isPVP: boolean;
+    showStats: boolean;
+    showDebug: boolean;
+    frameCount: number;
+    private lastUpdateTime;
+    private isPaused;
+    private isInitialized;
+    constructor(p: p5Instance);
+    setup(): void;
+    draw(): void;
+    update(deltaTime: number): void;
+    render(): void;
+    mousePressed(): void;
+    keyPressed(): void;
+    keyReleased(): void;
+    switchControl(mode: ControlMode): void;
+    togglePVP(): void;
+    toggleStats(): void;
+    toggleDebug(): void;
+    updateCamera(): void;
+    getWorldMousePosition(): IVector;
+    reset(): void;
+    pause(): void;
+    resume(): void;
+    private renderStats;
+    private renderDebug;
+    getGameManager(): GameManager;
+    isGameInitialized(): boolean;
+}
+//# sourceMappingURL=GameSketch.d.ts.map

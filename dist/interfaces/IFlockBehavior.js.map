@@ -1,0 +1,1 @@
+{"version":3,"file":"IFlockBehavior.js","sourceRoot":"","sources":["../../src/interfaces/IFlockBehavior.ts"],"names":[],"mappings":"AAmDA,MAAM,CAAC,MAAM,oBAAoB,GAAwB;IACvD,gBAAgB,EAAE,GAAG;IACrB,eAAe,EAAE,GAAG;IACpB,cAAc,EAAE,GAAG;IACnB,eAAe,EAAE,GAAG;IACpB,oBAAoB,EAAE,GAAG;IACzB,iBAAiB,EAAE,IAAI;IACvB,gBAAgB,EAAE,EAAE;IACpB,yBAAyB,EAAE,CAAC;IAC5B,UAAU,EAAE,KAAK;CAClB,CAAC"}
