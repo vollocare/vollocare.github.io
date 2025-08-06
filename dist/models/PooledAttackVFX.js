@@ -2,19 +2,20 @@
 /// <reference path="../types/p5.d.ts" />
 import { Vector } from '../utils/Vector';
 export class PooledAttackVFX {
-    constructor(p) {
+    constructor(_p) {
         this.id = '';
         this.duration = 0;
         this.remainingTime = 0;
+        // private p: p5Instance;
         this.active = false;
         this.vfxType = AttackVFXType.LINE;
         this.intensity = 1.0;
         // 動畫屬性
         this.animationProgress = 0;
         this.pulseOffset = 0;
-        this.p = p;
-        this.position = new Vector(p, 0, 0);
-        this.targetPosition = new Vector(p, 0, 0);
+        // this.p = _p;
+        this.position = new Vector(_p, 0, 0);
+        this.targetPosition = new Vector(_p, 0, 0);
         this.color = { r: 255, g: 255, b: 255, a: 255 };
         // 生成隨機脈衝偏移以避免所有特效同步
         this.pulseOffset = Math.random() * Math.PI * 2;
@@ -161,6 +162,7 @@ export var AttackVFXType;
 })(AttackVFXType || (AttackVFXType = {}));
 // 工廠函數用於創建物件池
 export function createAttackVFXPool(p, initialSize = 20, maxSize = 100) {
-    return new (require('../utils/ObjectPool').ObjectPool)(() => new PooledAttackVFX(p), initialSize, maxSize);
+    const ObjectPool = require('../utils/ObjectPool').ObjectPool;
+    return new ObjectPool(() => new PooledAttackVFX(p), initialSize, maxSize);
 }
 //# sourceMappingURL=PooledAttackVFX.js.map

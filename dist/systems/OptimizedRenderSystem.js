@@ -11,7 +11,6 @@ export class OptimizedRenderSystem {
     constructor(p, displayWidth, displayHeight, config) {
         // 視錐和相機
         this.viewBounds = { left: 0, right: 0, top: 0, bottom: 0 };
-        this.cameraPosition = { x: 0, y: 0 };
         // 渲染批次
         this.renderBatches = new Map();
         // 統計資料
@@ -23,8 +22,6 @@ export class OptimizedRenderSystem {
             batchCount: 0,
             frameTime: 0
         };
-        // 快取和優化
-        this.lastCameraPosition = { x: 0, y: 0 };
         this.visibilityCache = new Map();
         this.cacheExpireTime = 100; // 100ms
         this.p = p;
@@ -44,6 +41,9 @@ export class OptimizedRenderSystem {
             showCullingBounds: false,
             ...config
         };
+        // 初始化向量
+        this.cameraPosition = this.p.createVector(0, 0);
+        this.lastCameraPosition = this.p.createVector(0, 0);
         // 初始化渲染批次
         for (const level of Object.values(LODLevel)) {
             if (typeof level === 'number') {
@@ -62,7 +62,7 @@ export class OptimizedRenderSystem {
         this.clear();
         this.resetStats();
         // 渲染各個批次
-        for (const [lodLevel, batch] of this.renderBatches) {
+        for (const [, batch] of this.renderBatches) {
             if (batch.units.length === 0 && batch.obstacles.length === 0 && batch.effects.length === 0)
                 continue;
             this.p.push();

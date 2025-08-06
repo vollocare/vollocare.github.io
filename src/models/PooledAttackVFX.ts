@@ -3,6 +3,7 @@
 
 import { IPoolable } from '../interfaces/IObjectPool';
 import { IVector } from '../types/vector';
+import { ObjectPool } from '../utils/ObjectPool';
 import { Vector } from '../utils/Vector';
 import { Color } from '../types/common';
 
@@ -235,7 +236,6 @@ export enum AttackVFXType {
 
 // 工廠函數用於創建物件池
 export function createAttackVFXPool(p: p5Instance, initialSize: number = 20, maxSize: number = 100) {
-  const ObjectPool = require('../utils/ObjectPool').ObjectPool;
   return new ObjectPool<PooledAttackVFX>(
     () => new PooledAttackVFX(p),
     initialSize,

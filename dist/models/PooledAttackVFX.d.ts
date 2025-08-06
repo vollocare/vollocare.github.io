@@ -21,13 +21,12 @@ export declare class PooledAttackVFX implements IAttackVFX {
     color: Color;
     duration: number;
     remainingTime: number;
-    private p;
     private active;
     private vfxType;
     private intensity;
     private animationProgress;
     private pulseOffset;
-    constructor(p: p5Instance);
+    constructor(_p: p5Instance);
     initialize(startPos: IVector, endPos: IVector, color: Color, duration?: number): void;
     update(deltaTime: number): boolean;
     render(p: p5Instance): void;

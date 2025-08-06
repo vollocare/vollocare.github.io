@@ -29,7 +29,6 @@ export interface CollisionStats {
     quadTreeStats?: any;
 }
 export declare class CollisionSystem implements ICollisionSystem {
-    private p;
     private unitQuadTree?;
     private obstacleQuadTree?;
     private spatialPartitioningEnabled;
@@ -37,10 +36,9 @@ export declare class CollisionSystem implements ICollisionSystem {
     private stats;
     private frameChecks;
     private frameHistory;
-    private lastFrameTime;
     private nearbyUnitsCache;
     private cacheExpireTime;
-    constructor(p: p5Instance, worldBounds: BoundingBox);
+    constructor(_p: p5Instance, worldBounds: BoundingBox);
     private setupDefaultCollisionLayers;
     checkCollision(obj1: ISpatialObject, obj2: ISpatialObject): boolean;
     checkCollisionWithObstacles(unit: IUnit, obstacles: IObstacle[]): IObstacle | null;
@@ -54,7 +52,7 @@ export declare class CollisionSystem implements ICollisionSystem {
     resetStats(): void;
     private updateFrameStats;
     private cleanCache;
-    checkRaycast(start: IVector, end: IVector, obstacles: IObstacle[]): {
+    checkRaycast(start: IVector, end: IVector): {
         hit: boolean;
         obstacle?: IObstacle;
         point?: IVector;

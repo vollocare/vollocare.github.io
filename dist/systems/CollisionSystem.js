@@ -2,7 +2,8 @@
 /// <reference path="../types/p5.d.ts" />
 import { QuadTree } from '../utils/SpatialPartitioning';
 export class CollisionSystem {
-    constructor(p, worldBounds) {
+    constructor(_p, worldBounds) {
+        // this.p = p;
         this.spatialPartitioningEnabled = true;
         // 碰撞層級
         this.collisionLayers = new Map();
@@ -17,11 +18,10 @@ export class CollisionSystem {
         // 效能追蹤
         this.frameChecks = 0;
         this.frameHistory = [];
-        this.lastFrameTime = Date.now();
+        // private lastFrameTime: number = Date.now();
         // 快取
         this.nearbyUnitsCache = new Map();
         this.cacheExpireTime = 100; // 100ms
-        this.p = p;
         // 初始化空間分割結構
         this.unitQuadTree = new QuadTree(worldBounds, 8, 6);
         this.obstacleQuadTree = new QuadTree(worldBounds, 4, 4);
@@ -215,7 +215,7 @@ export class CollisionSystem {
             this.stats.averageChecksPerFrame = total / this.frameHistory.length;
         }
         this.frameChecks = 0;
-        this.lastFrameTime = now;
+        // this.lastFrameTime = now;
     }
     cleanCache() {
         const now = Date.now();
@@ -226,8 +226,8 @@ export class CollisionSystem {
         }
     }
     // 進階碰撞檢測方法
-    checkRaycast(start, end, obstacles) {
-        const result = { hit: false, obstacle: undefined, point: undefined };
+    checkRaycast(start, end) {
+        const result = { hit: false };
         // 使用空間分割查詢射線路徑上的障礙物
         if (this.spatialPartitioningEnabled && this.obstacleQuadTree) {
             const bounds = {
@@ -238,7 +238,7 @@ export class CollisionSystem {
             };
             const candidates = this.obstacleQuadTree.queryRange(bounds);
             for (const obstacle of candidates) {
-                if (this.lineCircleIntersection(start, end, obstacle.position, obstacle.r)) {
+                if (this.lineCircleIntersection(start, end, obstacle.position, obstacle.radius)) {
                     result.hit = true;
                     result.obstacle = obstacle;
                     result.point = obstacle.position; // 簡化實作

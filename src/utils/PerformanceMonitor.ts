@@ -276,14 +276,14 @@ export class PerformanceMonitor {
     const m = this.metrics;
     const history = this.performanceLog.slice(-20); // 最近 20 次記錄
     
-    let stability = 'stable';
+    let stability: 'stable' | 'moderate' | 'unstable' = 'stable';
     if (history.length >= 10) {
       const fpsVariance = this.calculateVariance(history.map(h => h.currentFPS));
       if (fpsVariance > 100) stability = 'unstable';
       else if (fpsVariance > 50) stability = 'moderate';
     }
     
-    let bottleneck = 'none';
+    let bottleneck: 'none' | 'update' | 'render' | 'overall' = 'none';
     if (m.updateTime > m.renderTime * 2) bottleneck = 'update';
     else if (m.renderTime > m.updateTime * 2) bottleneck = 'render';
     else if (m.averageFPS < 30) bottleneck = 'overall';

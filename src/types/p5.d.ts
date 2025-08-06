@@ -51,9 +51,13 @@ interface p5Instance {
   // Drawing
   line(x1: number, y1: number, x2: number, y2: number): void;
   circle(x: number, y: number, diameter: number): void;
+  rect(x: number, y: number, w: number, h?: number): void;
   
   // Color
   color(r: number, g: number, b: number, a?: number): any;
+  tint(r: number, g: number, b: number, a?: number): void;
+  tint(color: number, alpha?: number): void;
+  noTint(): void;
   
   // Text
   text(str: string, x: number, y: number, z?: number): void;

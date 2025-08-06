@@ -209,7 +209,7 @@ export class ObjectPoolManager implements IObjectPoolManager {
   public disableAutoCleanup(): void {
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
-      this.cleanupInterval = undefined;
+      this.cleanupInterval = undefined as any;
     }
   }
   

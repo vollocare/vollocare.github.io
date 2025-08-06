@@ -2,8 +2,6 @@
 /// <reference path="../types/p5.d.ts" />
 
 import { GameManager } from '../core/GameManager';
-import { IUnit } from '../interfaces/IUnit';
-import { IGroupUnit } from '../interfaces/IGroupUnit';
 import { ControlMode } from '../types/common';
 import { Vector } from '../utils/Vector';
 
@@ -320,7 +318,7 @@ export class GameFunctionalTests {
       for (const state of states) {
         switch (state) {
           case 'move':
-            testUnit.setMove(new Vector(this.p, 600, 600));
+            testUnit.setDestination(new Vector(this.p, 600, 600));
             break;
           case 'stop':
             testUnit.setStop();
@@ -369,8 +367,6 @@ export class GameFunctionalTests {
     const start = performance.now();
     
     try {
-      const initialGroupCount = this.gameManager.getGroupUnits().length;
-      
       // 測試群組單位的基本屬性
       const groupUnits = this.gameManager.getGroupUnits();
       
@@ -431,9 +427,9 @@ export class GameFunctionalTests {
       
       const storedDestination = testGroup.getDestination();
       const destinationSet = storedDestination !== null;
-      const correctDestination = storedDestination && 
+      const correctDestination = Boolean(storedDestination && 
         Math.abs(storedDestination.x - destination.x) < 0.1 && 
-        Math.abs(storedDestination.y - destination.y) < 0.1;
+        Math.abs(storedDestination.y - destination.y) < 0.1);
       
       return {
         name: 'Group Unit Destination',
@@ -743,7 +739,6 @@ export class GameFunctionalTests {
   }
   
   private finalizeTestSuite(suite: TestSuite): void {
-    const start = performance.now();
     
     suite.passed = suite.tests.every(test => test.passed);
     suite.duration = suite.tests.reduce((sum, test) => sum + test.duration, 0);

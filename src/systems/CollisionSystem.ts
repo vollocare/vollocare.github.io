@@ -293,7 +293,6 @@ export class CollisionSystem implements ICollisionSystem {
   }
   
   private updateFrameStats(): void {
-    const now = Date.now();
     
     // 更新每幀統計
     this.frameHistory.push(this.frameChecks);

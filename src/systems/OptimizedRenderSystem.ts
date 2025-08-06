@@ -6,6 +6,7 @@ import { IUnit } from '../interfaces/IUnit';
 import { IObstacle } from '../interfaces/IObstacle';
 import { Color, BoundingBox } from '../types/common';
 import { IVector } from '../types/vector';
+import { Vector } from '../utils/Vector';
 
 export interface RenderOptimizationConfig {
   // 視錐剔除
@@ -106,8 +107,8 @@ export class OptimizedRenderSystem implements IRenderSystem {
     };
     
     // 初始化向量
-    this.cameraPosition = this.p.createVector(0, 0);
-    this.lastCameraPosition = this.p.createVector(0, 0);
+    this.cameraPosition = new Vector(this.p, 0, 0);
+    this.lastCameraPosition = new Vector(this.p, 0, 0);
     
     // 初始化渲染批次
     for (const level of Object.values(LODLevel)) {
@@ -152,7 +153,7 @@ export class OptimizedRenderSystem implements IRenderSystem {
   
   // 視窗控制
   public setViewPort(viewX: number, viewY: number): void {
-    this.cameraPosition = { x: viewX, y: viewY };
+    this.cameraPosition = new Vector(this.p, viewX, viewY);
     
     // 更新視錐邊界
     const margin = this.config.frustumMargin;
@@ -229,7 +230,7 @@ export class OptimizedRenderSystem implements IRenderSystem {
   }
   
   // 除錯渲染
-  public renderDebugInfo(info: DebugInfo): void {
+  public renderDebugInfo(_info: DebugInfo): void {
     const debugText = [
       `Render Stats:`,
       `Objects: ${this.stats.renderedObjects}/${this.stats.totalObjects}`,
@@ -256,15 +257,15 @@ export class OptimizedRenderSystem implements IRenderSystem {
     }
   }
   
-  public renderArrows(enabled: boolean): void {
+  public renderArrows(_enabled: boolean): void {
     // 實作箭頭渲染
   }
   
-  public renderTargetLines(enabled: boolean): void {
+  public renderTargetLines(_enabled: boolean): void {
     // 實作目標線渲染
   }
   
-  public renderUnitStats(enabled: boolean): void {
+  public renderUnitStats(_enabled: boolean): void {
     // 實作單位統計渲染
   }
   
@@ -286,11 +287,11 @@ export class OptimizedRenderSystem implements IRenderSystem {
     }
   }
   
-  public renderHealthBars(units: IUnit[]): void {
+  public renderHealthBars(_units: IUnit[]): void {
     // 在 renderUnits 中處理
   }
   
-  public setBackgroundColor(color: Color): void {
+  public setBackgroundColor(_color: Color): void {
     // 設定背景色
   }
   
@@ -417,7 +418,7 @@ export class OptimizedRenderSystem implements IRenderSystem {
         // 簡化渲染
         this.p.fill(100);
         this.p.noStroke();
-        this.p.circle(obstacle.position.x, obstacle.position.y, obstacle.r * 1.5);
+        this.p.circle(obstacle.position.x, obstacle.position.y, obstacle.radius * 1.5);
         break;
     }
   }
@@ -445,7 +446,7 @@ export class OptimizedRenderSystem implements IRenderSystem {
       [0, 0, 255],   // 群組 3 - 藍色
     ];
     
-    const colorIndex = Math.min(unit.groupId - 1, colors.length - 1);
+    const colorIndex = Math.min((unit.groupId || 1) - 1, colors.length - 1);
     const color = colors[colorIndex];
     
     this.p.fill(color[0], color[1], color[2]);
